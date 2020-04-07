@@ -4,7 +4,10 @@ import datetime
 import random
 
 def IPADDRESS():    
-    return 'IP Adresa e klientit eshte: '+socket.gethostbyname(socket.gethostname())
+    return 'IP Adresa e klientit eshte: %s' % address[0]
+
+def PORT():
+    return 'Klienti eshte duke perdorur portin %d' % address[1]
 
 def COUNT(s):
 	a = s.lower()
@@ -14,7 +17,7 @@ def COUNT(s):
 		if letter in b:
 			vowels = vowels + 1
 	consonants = len(a) - vowels
-	return 'Teksti i pranuar permban %s zanore dhe %s bashketingellore' % (vowels, consonants)
+	return 'Teksti i pranuar permban %d zanore dhe %d bashketingellore' % (vowels, consonants)
 
 def REVERSE(s): 
 	return s[::-1] 
@@ -63,7 +66,7 @@ def CONVERT(convert, num):
         }
     def switch(convert):
         return switcher.get(convert, default)()
-    return switch(convert)
+    return '%.2f' %switch(convert)
 
 def BMI(height1, weight1):
     height = float(height1)
@@ -75,7 +78,7 @@ def BMI(height1, weight1):
         a = "i shendetshem"
     elif bmi>=25:
         a = "mbipeshe"
-    return 'Indexi juaj BMI eshte %s dhe ju jeni %s' %(bmi, a) 
+    return 'Indexi juaj BMI eshte %.2f dhe ju jeni %s' %(bmi, a) 
 
 def PRIME_NUMBERS(start1, end1):
     start = int(start1)
@@ -101,7 +104,7 @@ def THIRR(argumenti):
             'IPADDRESS': 
             IPADDRESS,
             'PORT': 
-            1,
+            PORT,
             'TIME': 
             TIME,
             'GAME': 
@@ -147,7 +150,7 @@ class ClientThread(threading.Thread):
 
     #mbishkrimi i metodes run
     def run(self):
-        print("Eshte lidhur klienti me IP %s ne portin %s"%(socket.gethostbyname(socket.gethostname()),address[1]))
+        print("Eshte lidhur klienti me IP %s ne portin %d" %address)
         self.client.send(bytes("Jeni lidhur me serverin, shkruani kerkesen",'utf-8'))
         mesazhi = ''
         while True:
@@ -161,7 +164,7 @@ class ClientThread(threading.Thread):
             print("Tek klienti ", mesazhi)
             self.client.send(mesazhi)
         self.client.close()
-        print("Klienti me IP %s ne portin %s eshte shkycur me sukses!"%(socket.gethostbyname(socket.gethostname()),address[1]))
+        print("Klienti me IP %s ne portin %d eshte shkycur me sukses!" %address)
 
 serverName = 'localhost'
 serverPort = 13000
@@ -169,7 +172,7 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server.bind((serverName, serverPort))
 
-print('Serveri eshte startuar ne %s ne portin %s' %(serverName, serverPort))
+print('Serveri eshte startuar ne %s ne portin %d' %(serverName, serverPort))
 server.listen(1)
 print('Serveri eshte i gatshem te pranoje kerkesa')
 
