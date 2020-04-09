@@ -3,7 +3,6 @@
 serverName = 'localhost'
 serverPort = 13000
 client = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-#print("Hello UDP Server, I am client")
 print('Serveri eshte duke pritur per kerkesa')
 
 while True:

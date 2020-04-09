@@ -149,14 +149,14 @@ def THIRR(argumenti):
     else:
         return 'Te hyra jovalide!'
 
-serverName = ''
+serverName = 'localhost'
 serverPort = 13000
 server = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 try:
     server.bind((serverName, serverPort))
     print("Une jam UDP Server dhe jam startuar ne %s ne portin %d"%(serverName, serverPort))
 except Exception as e:
-	raise SystemExit(f"Nuk u arrit komunikimi me serverin: {socket.gethostbyname(socket.gethostname())} ne port: {address[1]}, sepse: {e}")
+	raise SystemExit("Nuk u arrit komunikimi me serverin, arsyeja: ", e)
 
 while True:
     data, address = server.recvfrom(4096)

@@ -7,7 +7,7 @@ client.connect((serverName, serverPort))
 
 mesazhi=''
 while True:
-    mesazhi = client.recv(124)
+    mesazhi = client.recv(128)
     print(mesazhi.decode())
     var = input()
     if len(var)<=0:
