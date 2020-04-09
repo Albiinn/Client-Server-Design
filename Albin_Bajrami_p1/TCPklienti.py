@@ -7,10 +7,12 @@ client.connect((serverName, serverPort))
 
 mesazhi=''
 while True:
-  mesazhi = client.recv(124)
-  print(mesazhi.decode())
-  var = input()
-  client.sendall(bytes(var,'UTF-8'))
-  if var=='quit':
-    break
+    mesazhi = client.recv(124)
+    print(mesazhi.decode())
+    var = input()
+    if len(var)<=0:
+        break;
+    if var=='quit':
+        break
+    client.sendall(bytes(var,'UTF-8'))
 client.close()

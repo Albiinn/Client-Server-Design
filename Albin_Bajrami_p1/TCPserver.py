@@ -4,10 +4,10 @@ import datetime
 import random
 
 def IPADDRESS():    
-    return 'IP Adresa e klientit eshte: %s' % address[0]
+    return 'IP Adresa e klientit eshte: %s' % socket.gethostbyname(socket.gethostname())
 
 def PORT():
-    return 'Klienti eshte duke perdorur portin %d' % address[1]
+    return 'Klienti eshte duke perdorur portin %s' % address[1]
 
 def COUNT(s):
 	a = s.lower()
@@ -95,7 +95,7 @@ def PRIME_NUMBERS(start1, end1):
 
 def THIRR(argumenti):
     arguments = argumenti.split(" ")
-    
+
     if(arguments[0] == 'quit'):
         return 'quit'
 
@@ -108,9 +108,11 @@ def THIRR(argumenti):
             'TIME': 
             TIME,
             'GAME': 
-            GAME
+            GAME,
+            'LAMBDA':
+            lambda:'Nuk ekziston funksion i tille'
             }
-        return function1.get(arguments[0], "Invalid functions")()
+        return function1.get(arguments[0], lambda :'Nuk ekziston funksion i tille')()
 
     elif len(arguments)==2:
         function2 = {
@@ -120,8 +122,10 @@ def THIRR(argumenti):
             REVERSE,
             'PALINDROME': 
             PALINDROME,
+            'LAMBDA':
+            lambda:'Nuk ekziston funksion i tille'
             }
-        return function2.get(arguments[0], "Invalid functions")(arguments[1])
+        return function2.get(arguments[0], lambda argument : 'Nuk ekziston funksion i tille')(arguments[1])
 
     elif len(arguments)==3:
         function3 = {
@@ -132,12 +136,16 @@ def THIRR(argumenti):
             'BMI': 
             BMI,
             'PRIME_NUMBERS': 
-            PRIME_NUMBERS
+            PRIME_NUMBERS,
+            'NDRRO':
+            NDRRO,
+            'LAMBDA':
+            lambda:'Nuk ekziston funksion i tille'
             }
-        return function3.get(arguments[0], "Invalid functions")(arguments[1], arguments[2])
+        return function3.get(arguments[0], lambda argument1, argument2 :'Nuk ekziston funksion i tille')(arguments[1], arguments[2])
 
     else:
-        return 'Mungojne te hyrat ose jane jovalide!'
+        return 'Te hyra jovalide!'
 
 
 #e zgjerojme klasen threading.Thread dhe e mbishkruajme metoden run
@@ -150,12 +158,15 @@ class ClientThread(threading.Thread):
 
     #mbishkrimi i metodes run
     def run(self):
-        print("Eshte lidhur klienti me IP %s ne portin %d" %address)
+        print("Eshte lidhur klienti me IP %s ne portin %d" %(socket.gethostbyname(socket.gethostname()),address[1]))
         self.client.send(bytes("Jeni lidhur me serverin, shkruani kerkesen",'utf-8'))
         mesazhi = ''
         while True:
             #kerkesat nuk ia kalojne 128 byte-ve
-            data = self.client.recv(124)
+            data = self.client.recv(1024)
+            if len(data)<=0:
+                self.client.send(str.encode('Mungojne te hyrat'))
+                break;
             print("Nga klienti ", str(data))
             mesazhi = str.encode(str(THIRR(data.decode("UTF-8"))))
             #msg = data.decode()
@@ -164,17 +175,22 @@ class ClientThread(threading.Thread):
             print("Tek klienti ", mesazhi)
             self.client.send(mesazhi)
         self.client.close()
-        print("Klienti me IP %s ne portin %d eshte shkycur me sukses!" %address)
+        print("Klienti me IP %s ne portin %d eshte shkycur me sukses!" %(socket.gethostbyname(socket.gethostname()),address[1]))
+
 
 serverName = 'localhost'
 serverPort = 13000
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-server.bind((serverName, serverPort))
 
-print('Serveri eshte startuar ne %s ne portin %d' %(serverName, serverPort))
-server.listen(1)
-print('Serveri eshte i gatshem te pranoje kerkesa')
+try:
+    server.bind((serverName, serverPort))
+    print('Serveri eshte startuar ne %s ne portin %d' %(serverName, serverPort))
+    server.listen(1)
+    print('Serveri eshte i gatshem te pranoje kerkesa')
+except Exception as e:
+    raise SystemExit(f"Nuk mund ta lidhim serverin ne host: {socket.gethostbyname(socket.gethostname())} to port: {address[1]}, sepse: {e}")
+
 
 while True:
     client, address = server.accept()
