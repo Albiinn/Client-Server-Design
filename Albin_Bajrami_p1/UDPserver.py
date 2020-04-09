@@ -2,6 +2,8 @@ import socket
 import datetime
 import random
 
+global address
+
 def IPADDRESS():    
     return 'IP Adresa e klientit eshte: %s' % socket.gethostbyname(socket.gethostname())
 
@@ -139,37 +141,33 @@ def THIRR(argumenti):
             BMI,
             'PRIME_NUMBERS': 
             PRIME_NUMBERS,
-            'NDRRO':
-            NDRRO,
             'LAMBDA':
             lambda:'Nuk ekziston funksion i tille'
             }
         return function3.get(arguments[0], lambda argument1, argument2 :'Nuk ekziston funksion i tille')(arguments[1], arguments[2])
 
     else:
-        return 'Mungojne te hyrat ose jane jovalide!'
+        return 'Te hyra jovalide!'
 
 serverName = ''
 serverPort = 13000
 server = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-server.bind((serverName, serverPort))
-print("Une jam UDP Server dhe jam startuar ne %s ne portin %d"%(serverName, serverPort))
-
-def NDRRO(hostname, port):
-    server = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+try:
     server.bind((serverName, serverPort))
-    return 'Tani UDP Server eshte startuar ne %s ne portin %d'%(hostname, port)
-
+    print("Une jam UDP Server dhe jam startuar ne %s ne portin %d"%(serverName, serverPort))
+except Exception as e:
+	raise SystemExit(f"Nuk u arrit komunikimi me serverin: {socket.gethostbyname(socket.gethostname())} ne port: {address[1]}, sepse: {e}")
 
 while True:
-    global address
     data, address = server.recvfrom(4096)
-    print("U dergua kerkesa e klientit me IP adrese:%s ne portin %d" 
+    if len(data)<=0:
+        print("Klienti me IP %s ne portin %d doli nga procesi" 
+                    %(socket.gethostbyname(socket.gethostname()), address[1]))
+    print("U dergua kerkesa e klientit me IP %s ne portin %d" 
           %(socket.gethostbyname(socket.gethostname()), address[1]))
     message = str.encode(str(THIRR(data.decode("UTF-8"))))
     if str(THIRR(data.decode("UTF-8")))=='quit':
               print("Klienti me IP %s ne portin %d doli nga procesi" 
                     %(socket.gethostbyname(socket.gethostname()), address[1]))
-              #continue
     server.sendto(message,address)
 server.close()

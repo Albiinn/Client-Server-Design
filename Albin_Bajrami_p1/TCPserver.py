@@ -3,6 +3,8 @@ import threading
 import datetime
 import random
 
+global address
+
 def IPADDRESS():    
     return 'IP Adresa e klientit eshte: %s' % socket.gethostbyname(socket.gethostname())
 
