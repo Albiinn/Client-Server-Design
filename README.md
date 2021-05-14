@@ -1,4 +1,4 @@
-# RR2020_SOCKETS
+## RR2020_SOCKETS
 
 Projekti permbane gjithsej kater programe: **(1) TCPklienti.py, (2) TCPserver.py, (3) UDPklienti.py dhe (4) UDPserver.py.**
 Te dy serveret, si TCPserveri ashtu edhe UDPserveri, jane dizajnuar dhe implementuar ne ate menyre qe te punojne pa nderprerje dhe te pranojne nje sekuence te kerkesave nga i njejti klient apo nga klient te ndryshem. Pra, te dy serveret e perkrahin punen me shume klienta (multithreading) njekohesisht dhe i perkrahin keto kerkesa (metoda):
@@ -14,3 +14,5 @@ Te dy serveret, si TCPserveri ashtu edhe UDPserveri, jane dizajnuar dhe implemen
 - Metoda **CONVERT**, e cila pranon dy tekste, njeri I formatit string e tjetri I formatit float. Varesisht nga stringu qe pranon, kjo metode bene keto shnderrime: cmToFeet, FeetToCm, kmToMiles, MileToKm dhe kthen shnderrimin perkates.
 - Metoda **BMI**, e cila pranon dy tekste te formatit float, gajtesine (m) dhe peshen (kg), dhe kthen BMI index-in dhe nje tekst qe tregon se sa i shendetshem jeni
 - Metoda **PRIME_NUMBERS**, e cila pranon dy tekste te formatit int dhe kthen nje liste e cila permbane te gjithe numrat e thjeshte (prime) ndermjet atyre dy numrave
+
+Per te ekzekutuar programin, se pari behet duhet hapur filen **TCPserver.py** (apo **UDPserver.py.**) ne menyre qe te startohet serveri dhe pastaj duhet hapur filen **TCPklienti.py** (apo **UDPklienti.py**) te cilen mund ta bejme disa here radhazi ne menyre qe te lidhim disa klienta ne server.
